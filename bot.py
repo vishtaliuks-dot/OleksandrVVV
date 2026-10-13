@@ -20,7 +20,7 @@ import uvicorn
 
 BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
 MINI_APP_URL = os.getenv("MINI_APP_URL", "").strip().rstrip("/")
-COURIER_USERNAME = os.getenv("COURIER_USERNAME", "florida_dostawa").strip().lstrip("@")
+COURIER_USERNAME = os.getenv("COURIER_USERNAME", "florida_operator").strip().lstrip("@")
 DB_PATH = os.getenv("DB_PATH", "sklep.db")
 UPLOAD_DIR = Path(os.getenv("UPLOAD_DIR", "uploads"))
 OPERATOR_IDS = {int(x.strip()) for x in os.getenv("OPERATOR_IDS", "").split(",") if x.strip().isdigit()}
