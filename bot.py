@@ -10,8 +10,8 @@ from urllib.parse import parse_qsl
 
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart, Command
-from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
-from fastapi import FastAPI, HTTPException
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo, MenuButtonWebApp
+from fastapi import FastAPI, HTTPException, Header
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 import uvicorn
@@ -157,7 +157,7 @@ async def api_health():
 
 
 @app.get("/api/operator/check")
-async def operator_check(x_telegram_init_data: str = ""):
+async def operator_check(x_telegram_init_data: str = Header(default="", alias="X-Telegram-Init-Data")):
     user = require_operator(x_telegram_init_data)
     return {"ok": True, "operator_id": int(user["id"])}
 
@@ -254,7 +254,7 @@ async def main():
     init_db()
     try:
         await bot.set_chat_menu_button(
-            menu_button={"type": "web_app", "text": "Sklep", "web_app": {"url": MINI_APP_URL}}
+            menu_button=MenuButtonWebApp(text="Sklep", web_app=WebAppInfo(url=MINI_APP_URL))
         )
     except Exception as exc:
         print(f"Nie udało się ustawić przycisku menu: {exc!r}")
