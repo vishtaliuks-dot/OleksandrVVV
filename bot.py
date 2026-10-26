@@ -18,10 +18,10 @@ import uvicorn
 BOT_TOKEN = "8655985104:AAF2zyAWNLSfu6srosSWISTRNl87JP5_kak"
 
 # Wklej publiczny adres HTTPS swojej usługi Render.
-APP_URL = "https://TWOJ-SERWIS.onrender.com"
+APP_URL = "https://dashboard.render.com/web/srv-dbfr5tui0phs73ecrlig/deploys/dep-dbfr5uei0phs73ecrmhg"
 MINI_APP_URL = APP_URL
-COURIER_USERNAME = "florida_dostawa"  # bez znaku @
-OPERATOR_IDS = []  # np. [123456789] — wpisz swoje numeryczne Telegram ID
+COURIER_USERNAME = "Molni_Oper"  # bez znaku @
+OPERATOR_IDS = [7870704622]  # np. [123456789] — wpisz swoje numeryczne Telegram ID
 DB_PATH = os.getenv("DB_PATH", "florida_vape.db")
 # ========================================================
 
