@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fff8df">
+<title>Florida Vape — sklep</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--yellow:#ffd43b;--yellow2:#ffeb85;--ink:#24221a;--muted:#77715f;--line:#eee2b7;--paper:#fffdf5;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#fff8df,#fff 360px);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;animation:enter .45s ease both}
+@keyframes enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.wrap{max-width:900px;margin:auto;padding:16px 13px 44px}.hero{display:flex;align-items:center;gap:15px;background:var(--white);border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:0 12px 35px #8c6c1412}
+.logo{display:grid;place-items:center;flex:0 0 76px;height:76px;border-radius:22px;background:var(--yellow);font-size:38px;box-shadow:inset 0 -4px 0 #d9ad00}
+.eyebrow{font-size:10px;font-weight:900;letter-spacing:.16em;color:#927400;text-transform:uppercase}.hero h1{font-size:25px;margin:5px 0}.hero p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+h2{font-size:17px;margin:23px 2px 11px}.city,.field,select,textarea{width:100%;padding:13px;border:1px solid var(--line);border-radius:13px;background:white;color:var(--ink);font:inherit}.city{display:flex;justify-content:space-between;cursor:pointer;text-align:left}.city.selected{background:#fff2b5;border-color:#e7bd13}
+.categories{display:flex;gap:8px;flex-wrap:wrap}.cat{border:1px solid var(--line);background:#fff;color:#746b50;border-radius:99px;padding:10px 14px;cursor:pointer}.cat.active{background:var(--yellow);border-color:#e4b900;color:#29240d;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.product{background:white;border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 8px 24px #6b52090b;animation:enter .4s ease both;transition:transform .2s,box-shadow .2s}.product:hover{transform:translateY(-3px);box-shadow:0 12px 30px #6b52091a}.product img{width:100%;height:140px;object-fit:contain;background:#fffdf5}.product-body{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}.name{font-size:13px;font-weight:850;line-height:1.35}.desc{font-size:12px;color:var(--muted);line-height:1.45}.price{font-size:15px;font-weight:900}.stock{font-size:11px;color:var(--muted)}button{font:inherit;cursor:pointer}.add,.primary{width:100%;border:0;border-radius:12px;background:var(--yellow);color:#28230c;font-weight:900;padding:12px}.add:disabled,.primary:disabled{opacity:.45;cursor:not-allowed}
+.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:15px;margin-top:19px}.row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #f0e8cf;font-size:13px}.remove{border:0;background:transparent;color:#9b3e26}.check{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:var(--muted);line-height:1.45;margin-top:14px}.check input{accent-color:#e5b900;width:18px;height:18px}.notice{display:none;margin-top:12px;padding:12px;border-radius:12px;background:#eaf8e9;color:#245b29;font-size:13px;line-height:1.5}.notice.show{display:block}.notice.error{background:#fff0e9;color:#8a2d17}.small{font-size:11px;color:var(--muted);line-height:1.5;margin-top:10px}.hidden{display:none!important}.empty{font-size:12px;color:var(--muted)}
+@media(min-width:620px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.product img{height:170px}.wrap{padding-top:22px}.hero{padding:24px}.logo{flex-basis:90px;height:90px}}
+@media(max-width:390px){.hero{padding:13px;gap:10px}.logo{flex-basis:58px;height:58px;font-size:29px}.hero h1{font-size:21px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero"><div class="logo">FV</div><div><div class="eyebrow">Florida Vape · sklep online</div><h1>ŻÓŁTA EDYCJA</h1><p>Prosty, jasny sklep w żółto-białym stylu.</p></div></header>
+<h2>01 / Wybierz miasto</h2>
+<button class="city" id="cityButton"><span>📍 Bielsko-Biała</span><strong id="cityStatus">Wybierz →</strong></button>
+<section id="shop" class="hidden">
+<h2>02 / Kategorie</h2><div class="categories" id="categories"></div>
+<h2>03 / Produkty</h2><div class="grid" id="products"></div>
+<div class="panel"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><strong>Twój koszyk</strong><span id="count" class="small">0 produktów</span></div><div id="cart"><p class="empty">Koszyk jest pusty.</p></div>
+<label class="check"><input type="checkbox" id="age"><span>Potwierdzam, że mam ukończone 18 lat.</span></label>
+<button class="primary" id="order" disabled>Złóż zamówienie</button><div id="notice" class="notice"></div><p class="small">Możesz wybrać wiele produktów, każdy maksymalnie raz. Limit: 2 zamówienia dziennie na konto Telegram.</p></div>
+</section>
+</div>
+<script>
+const tg=window.Telegram?.WebApp;if(tg){tg.ready();tg.expand();}
+let products=[],category='Kartridze',city='',cart=new Set();const categories=['Kartridze','Razki','Liquidy'];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function say(msg,error=false){const el=document.getElementById('notice');el.textContent=msg;el.className='notice show'+(error?' error':'');}
+async function loadProducts(){try{const r=await fetch('/api/products');const d=await r.json();products=d.products||[];renderCategories();renderProducts();renderCart();}catch(e){say('Nie udało się pobrać produktów. Odśwież stronę.',true)}}
+function chooseCity(){city='Bielsko-Biała';document.getElementById('cityButton').classList.add('selected');document.getElementById('cityStatus').textContent='✓ Wybrano';document.getElementById('shop').classList.remove('hidden');loadProducts();}
+document.getElementById('cityButton').addEventListener('click',chooseCity);
+function renderCategories(){document.getElementById('categories').innerHTML=categories.map(c=>`<button class="cat ${c===category?'active':''}" onclick="setCategory('${c}')">${c}</button>`).join('')}
+function setCategory(c){category=c;renderCategories();renderProducts()}
+function renderProducts(){const list=products.filter(p=>p.category===category);document.getElementById('products').innerHTML=list.length?list.map(p=>`<article class="product"><img src="${esc(p.photo||'')}" alt="" onerror="this.style.visibility='hidden'"><div class="product-body"><div class="name">${esc(p.name)}</div><div class="desc">${esc(p.description||'')}</div><div class="price">${Number(p.price).toFixed(2)} zł</div><div class="stock">${p.stock>0?'Dostępne: '+p.stock:'Brak w magazynie'}</div><button class="add" ${p.stock<=0||cart.has(p.id)?'disabled':''} onclick="toggle(${p.id})">${cart.has(p.id)?'Dodano ✓':p.stock>0?'Dodaj do koszyka':'Niedostępny'}</button></div></article>`).join(''):'<p class="empty">Brak produktów w tej kategorii.</p>'}
+function toggle(id){if(cart.has(id))cart.delete(id);else cart.add(id);renderProducts();renderCart()}
+function renderCart(){const items=products.filter(p=>cart.has(p.id));document.getElementById('count').textContent=items.length+' produktów';document.getElementById('cart').innerHTML=items.length?items.map(p=>`<div class="row"><span>${esc(p.name)}<br><strong>${Number(p.price).toFixed(2)} zł</strong></span><button class="remove" onclick="toggle(${p.id})">Usuń</button></div>`).join(''):'<p class="empty">Koszyk jest pusty.</p>';document.getElementById('order').disabled=!items.length||!document.getElementById('age').checked}
+document.getElementById('age').addEventListener('change',renderCart);
+document.getElementById('order').addEventListener('click',async()=>{if(!tg?.initData){say('Otwórz Mini App z przycisku w bocie Telegram, aby złożyć zamówienie.',true);return}try{const r=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({init_data:tg.initData,city,product_ids:[...cart],age_confirmed:document.getElementById('age').checked})});const d=await r.json();if(!r.ok)throw new Error(d.detail||'Nie udało się złożyć zamówienia.');say('Zamówienie #'+d.order_id+' przyjęte. Przejdź do kuriera: '+d.courier_url);cart.clear();await loadProducts();if(tg?.openTelegramLink)tg.openTelegramLink(d.courier_url)}catch(e){say(e.message,true)}});
+loadProducts();
+</script>
+</body>
+</html>
