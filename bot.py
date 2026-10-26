@@ -15,7 +15,7 @@ import uvicorn
 
 # ===================== KONFIGURACJA =====================
 # Wklej token od @BotFather pomiędzy cudzysłowy.
-BOT_TOKEN = "WKLEJ_TUTAJ_TOKEN_OD_BOTFATHER"
+BOT_TOKEN = "8655985104:AAF2zyAWNLSfu6srosSWISTRNl87JP5_kak"
 
 # Wklej publiczny adres HTTPS swojej usługi Render.
 APP_URL = "https://TWOJ-SERWIS.onrender.com"
